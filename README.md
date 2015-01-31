@@ -1,2 +1,3 @@
-# client
-Project FP Client
+# Project FP
+
+Client proof of concept
