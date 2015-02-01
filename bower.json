@@ -2,6 +2,9 @@
   "name": "projectfp",
   "private": "true",
   "devDependencies": {
-    "ionic": "driftyco/ionic-bower#1.0.0-beta.14"
+  },
+  "dependencies": {
+    "ionic": "driftyco/ionic-bower#1.0.0-beta.14",
+    "ngCordova": "~0.1.12-alpha"
   }
 }
