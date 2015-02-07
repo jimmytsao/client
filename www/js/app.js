@@ -18,9 +18,10 @@ angular
     });
   })
 
-  .controller('imageController', function($scope, $ionicPlatform, $cordovaCamera){
+  .controller('imageController', function($scope, $ionicPlatform, $cordovaCamera, $ionicModal, $jrCrop){
 
     $scope.dataUrl;
+    $scope.croppedDataUrl;
 
     $ionicPlatform.ready(function(){
 
@@ -40,10 +41,31 @@ angular
 
         $cordovaCamera.getPicture(options).then(function(imageData) {
           $scope.dataUrl = imageData;
+
+          $scope.crop($scope.dataUrl);
         }, function(err) {
           // error
           console.log('ERROR: ', err);
         });      
       };
     });
+
+    $scope.crop = function(image) {
+      $jrCrop.crop({
+        url: 'data:image/jpeg;base64,'+image,
+        width: 250,
+        height: 250
+      }).then(function(canvas) {
+        $ionicModal.fromTemplateUrl('result-cropped.html', function(modal) {
+          $scope.modal = modal;
+          modal.show().then(function() {
+            document.querySelector('.cropped-canvas').appendChild(canvas);
+            var can = document.querySelector('canvas');
+            $scope.croppedDataUrl = canvas.toDataURL();
+            console.log('CANVAS', $scope.croppedDataUrl);
+          });
+        })
+      });
+    };
+
   })
