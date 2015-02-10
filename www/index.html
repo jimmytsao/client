@@ -30,19 +30,62 @@
         width: 300px;
         height: auto;
       }
-    
+
+      .clipper {
+        margin-top: 30px;
+        overflow: hidden;        
+        width: 320px;
+        height: 320px;
+        border: 2px solid red;
+        position: relative;
+      }
+
+      .photo {
+        position: absolute;
+        width: 320px;
+        /*height: 700px;*/
+      }
+
+      .box {
+        position: absolute;
+        border: 1px solid blue;
+        height: 30%;
+        left: 0;
+        right: 0;
+        top: 20%;
+      }
+
+      .cropped {
+        width: 320px;
+        border: 2px solid green;
+        margin-top: 20px;
+      }
+      .result {
+        width: 320px;
+      }
+
     </style>
   </head>
   <body ng-app="starter">
 
     <ion-pane>
       <ion-header-bar class="bar-stable">
-        <h1 class="title">Ionic Blank Starter</h1>
+        <h1 class="title">Lucky Lotto</h1>
       </ion-header-bar>
       <ion-content>
         <div ng-controller='imageController'>
-          <img src='data:image/jpeg;base64,{{dataUrl}}' class='testImage'>
+
           <button ng-click='takePicture()'>Take a picture</button>
+          <div class='clipper'>
+            <canvas id='photo' class='photo'></canvas>
+            <div class='box'></div>
+          </div>
+<!--           <img src='data:image/jpeg;base64,{{dataUrl}}' class='testImage'>
+ -->          
+        
+          <div class='cropped'>
+            <canvas id='result' class='result'></canvas>
+          </div>
         </div>
       </ion-content>
     </ion-pane>
