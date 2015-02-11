@@ -23,77 +23,78 @@ angular
     $scope.dataUrl;
 
     $ionicPlatform.ready(function(){
+      $scope.takePicture = takePicture;
+    });
 
-      $scope.takePicture = function takePicture(){
-        
-        var options = {
-          quality: 100,
-          destinationType: Camera.DestinationType.DATA_URL,
-          sourceType: Camera.PictureSourceType.CAMERA,
-          allowEdit: false,
-          encodingType: Camera.EncodingType.JPEG,
-          targetWidth: 1500,
-          targetHeight: 1500,
-          popoverOptions: CameraPopoverOptions,
-          saveToPhotoAlbum: false
-        };
-
-        $cordovaCamera.getPicture(options).then(function(imageData) {
-          var sourceCoordinates;
-
-          $scope.dataUrl = imageData;
-          loadImgToCanvas('photo', $scope.dataUrl, 1125, 1500);
-
-          sourceCoordinates = calculateSourceImageCoordinates(1500, 1125, 0.2, 0.3);
-          loadCroppedCanvas('photo', sourceCoordinates, 'result');
-        }, function(err) {
-          // error
-          console.log('ERROR: ', err);
-        });      
+    function takePicture(){
+      
+      var options = {
+        quality: 100,
+        destinationType: Camera.DestinationType.DATA_URL,
+        sourceType: Camera.PictureSourceType.CAMERA,
+        allowEdit: false,
+        encodingType: Camera.EncodingType.JPEG,
+        targetWidth: 1500,
+        targetHeight: 1500,
+        popoverOptions: CameraPopoverOptions,
+        saveToPhotoAlbum: false
       };
 
-      function loadImgToCanvas(canvasId, dataUrl, width, height){
-        var canvas = document.getElementById(canvasId);
-        var context = canvas.getContext('2d');
-        var img = new Image();
+      $cordovaCamera.getPicture(options).then(function(imageData) {
+        var sourceCoordinates;
 
-        canvas.width = width;
-        canvas.height = height;
+        $scope.dataUrl = imageData;
+        loadImgToCanvas('photo', $scope.dataUrl, 1125, 1500);
 
-        img.onload = function drawImageToCanvas(){
-          context.drawImage(img,0,0);
-        };
+        sourceCoordinates = calculateSourceImageCoordinates(1500, 1125, 0.2, 0.3);
+        loadCroppedCanvas('photo', sourceCoordinates, 'result');
+      }, function(err) {
+        // error
+        console.log('ERROR: ', err);
+      });      
+    }
 
-        img.src = 'data:image/jpeg;base64,' + dataUrl;
-      }
+    function loadImgToCanvas(canvasId, dataUrl, width, height){
+      var canvas = document.getElementById(canvasId);
+      var context = canvas.getContext('2d');
+      var img = new Image();
 
-      function calculateSourceImageCoordinates(canvasHeight, canvasWidth, topPercent, heightPercent){
-        var source = {
-          x: 0,
-          y: canvasHeight * topPercent,
-          width: canvasWidth,
-          height: canvasHeight * heightPercent
-        };
+      canvas.width = width;
+      canvas.height = height;
 
-        return source;
-      }
+      img.onload = function drawImageToCanvas(){
+        context.drawImage(img,0,0);
+      };
 
-      function loadCroppedCanvas(sourceId, sourceCoordinates, destinationId){
-        var source = document.getElementById(sourceId);
-        var cropped = document.getElementById(destinationId);
-        var croppedContext = cropped.getContext('2d');
-        var img = new Image();
+      img.src = 'data:image/jpeg;base64,' + dataUrl;
+    }
 
-        cropped.width = sourceCoordinates.width;
-        cropped.height = sourceCoordinates.height;
+    function calculateSourceImageCoordinates(canvasHeight, canvasWidth, topPercent, heightPercent){
+      var source = {
+        x: 0,
+        y: canvasHeight * topPercent,
+        width: canvasWidth,
+        height: canvasHeight * heightPercent
+      };
 
-        img.onload = function drawCroppedImageToCanvas(){
-          console.log('Image Width and Height: ',this.width, this.height);
-          console.log('Data: ', JSON.stringify(sourceCoordinates));
-          croppedContext.drawImage(img, sourceCoordinates.x, sourceCoordinates.y, sourceCoordinates.width, sourceCoordinates.height, 0, 0, sourceCoordinates.width, sourceCoordinates.height);
-        };
+      return source;
+    }
 
-        img.src = 'data:image/jpeg;base64,' + $scope.dataUrl;
-      }
-    });
-  })
+    function loadCroppedCanvas(sourceId, sourceCoordinates, destinationId){
+      var source = document.getElementById(sourceId);
+      var cropped = document.getElementById(destinationId);
+      var croppedContext = cropped.getContext('2d');
+      var img = new Image();
+
+      cropped.width = sourceCoordinates.width;
+      cropped.height = sourceCoordinates.height;
+
+      img.onload = function drawCroppedImageToCanvas(){
+        console.log('Image Width and Height: ',this.width, this.height);
+        console.log('Data: ', JSON.stringify(sourceCoordinates));
+        croppedContext.drawImage(img, sourceCoordinates.x, sourceCoordinates.y, sourceCoordinates.width, sourceCoordinates.height, 0, 0, sourceCoordinates.width, sourceCoordinates.height);
+      };
+
+      img.src = 'data:image/jpeg;base64,' + $scope.dataUrl;
+    }
+  });

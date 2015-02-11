@@ -35,7 +35,7 @@
         margin-top: 30px;
         overflow: hidden;        
         width: 320px;
-        height: 320px;
+        height: 427px;
         border: 2px solid red;
         position: relative;
       }
@@ -43,7 +43,6 @@
       .photo {
         position: absolute;
         width: 320px;
-        /*height: 700px;*/
       }
 
       .box {
@@ -64,6 +63,9 @@
         width: 320px;
       }
 
+      canvas {
+        display: block;
+      }
     </style>
   </head>
   <body ng-app="starter">
@@ -74,7 +76,10 @@
       </ion-header-bar>
       <ion-content>
         <div ng-controller='imageController'>
-
+          <button ng-click='panLeft()'>Left</button>
+          <button ng-click='panRight()'>Right</button>
+          <button ng-click='doubleScale()'>2x Scale</button>
+          <button ng-click='halveScale()'>1/2 Scale</button>
           <button ng-click='takePicture()'>Take a picture</button>
           <div class='clipper'>
             <canvas id='photo' class='photo'></canvas>
